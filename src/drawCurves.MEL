@@ -1,0 +1,39 @@
+/////////////////////////////////////////////////////////
+//created by hmaya at 2012.3.9
+//绘画函数的图像
+//x= 3*t*log(t) -  (1/30)*e^(-(30*t-30/e)^4);
+//y=t;
+//z=0;
+//t->[0,2]
+//参数说明：
+//proc drawFn(float $v_min,float $v_max,float $step,string $curveName)
+//-------------x最小值------x最大值--------步长-------曲线名称------
+/////////////////////////////////////////////////////////
+
+proc drawFn(float $v_min,float $v_max,float $step,string $curveName){
+    int $count_point = ($v_max - $v_min)/$step;
+    //==================画线======================//
+    curve -d 1 -p -2 1 0 -p 0 2 0 -p 1 1 0 -k 0 -k 1 -k 2 -n curve_temp;
+    rebuildCurve -ch 1 -rpo 1 -rt 0 -end 1 -kr 2 -kcp 0 -kep 0 -kt 0 -s ($count_point-1) -d 1 -tol 0.01 "curve_temp";
+    
+    //===============定义数学函数=====================//
+    float $t;
+    int $n=0;
+    for($t=$v_min;$t<=$v_max;$t=$t+$step){
+        float $value_x[];
+        float $value_y[];
+        float $value_z[];
+        float $e = 2.71828183;
+              //f(y) = 3*y*log(y) -  (1/30) * e^-(30*y-30/e)^4
+              $value_x[$n]= 3*$t*log10($t) - exp(-pow(30*$t-30/$e, 4))/30;
+              $value_z[$n]= 0;
+              $value_y[$n]= $t;
+        move -a $value_x[$n] $value_y[$n] $value_z[$n] curve_temp.ep[$n];
+        $n++;
+    } //end for $t
+    rename curve_temp $curveName;
+}
+//end proc
+
+//Run Proc
+drawFn(0.00001,2,0.01,"FnCurve");
