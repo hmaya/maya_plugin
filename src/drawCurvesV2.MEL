@@ -14,6 +14,8 @@
 //$curveName
 /////////////////////////////////////////////////////////
 
+//test update
+
 proc drawFn(float $v_min,float $v_max,float $step,string $curveName, int $ID){
     int $count_point = ($v_max - $v_min)/$step;
     //create curve
